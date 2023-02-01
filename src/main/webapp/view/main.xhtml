@@ -5,7 +5,6 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:ace="http://www.icefaces.org/icefaces/components">
-<!--        xmlns:p="http://primefaces.org/ui">-->
 
 <f:view>
     <h:head>
@@ -27,12 +26,12 @@
 
                 <h:outputLabel for="X">X ∈ [-4, 4]</h:outputLabel><br/>
                 <ace:sliderEntry id="X">
-
                 </ace:sliderEntry>
                 <br/><br/>
                 <h:outputLabel for="Y">Y ∈ [-5, 5]</h:outputLabel>
                 <br/>
                 <h:inputText id="Y" required="true" requiredMessage="Введите значение Y" maxlength="10">
+<!--                    <f:validator validatorId="yValidator"/>-->
                 </h:inputText>
                 <br/><br/>
                 <h:outputLabel>R ∈ [1, 5]</h:outputLabel>
@@ -47,7 +46,7 @@
                 <br/><br/>
                 <h:commandButton type="button" id="sendButton" styleClass="mainButtons" value="Ввод"/>
                 <br/>
-                <h:commandButton id="backButton" styleClass="mainButtons" value="Вернуться назад" action="goBack"/>
+                <h:commandButton id="backButton" styleClass="mainButtons" value="Вернуться назад" action="toStartPage"/>
 
             </h:form>
 
