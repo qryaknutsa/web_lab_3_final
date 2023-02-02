@@ -9,6 +9,11 @@
 <!--        <validator-class>validators.YValidator</validator-class>-->
 <!--    </validator>-->
 
+    <managed-bean>
+        <managed-bean-name>result</managed-bean-name>
+        <managed-bean-class>managedBeans.Result</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 
     <navigation-rule>
         <from-view-id>/view/index.xhtml</from-view-id>
