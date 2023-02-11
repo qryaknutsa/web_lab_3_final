@@ -22,18 +22,12 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-//    compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
-
-    // https://mvnrepository.com/artifact/com.sun.faces/jsf-api
-//    implementation 'com.sun.faces:jsf-api:2.2.20'
-
-// https://mvnrepository.com/artifact/org.icefaces/icefaces-ace
     implementation 'org.icefaces:icefaces-ace:4.3.0'
-// https://mvnrepository.com/artifact/jakarta.faces/jakarta.faces-api
     implementation 'jakarta.faces:jakarta.faces-api:4.0.1'
-
-    // https://mvnrepository.com/artifact/io.openliberty.features/managedBeans-2.0
     implementation 'io.openliberty.features:managedBeans-2.0:23.0.0.1'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+// https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation 'org.postgresql:postgresql:42.5.2'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

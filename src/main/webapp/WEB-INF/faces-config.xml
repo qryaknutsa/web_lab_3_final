@@ -4,30 +4,34 @@
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                                   https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
 
-<!--    <validator>-->
-<!--        <validator-id>yValidator</validator-id>-->
-<!--        <validator-class>validators.YValidator</validator-class>-->
-<!--    </validator>-->
+    <managed-bean>
+        <managed-bean-name>ResultBean</managed-bean-name>
+        <managed-bean-class>managedBeans.ResultBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
 
     <managed-bean>
-        <managed-bean-name>result</managed-bean-name>
-        <managed-bean-class>managedBeans.Result</managed-bean-class>
+        <managed-bean-name>TableController</managed-bean-name>
+        <managed-bean-class>managedBeans.TableController</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
     <navigation-rule>
-        <from-view-id>/view/index.xhtml</from-view-id>
+        <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>toMainPage</from-outcome>
-            <to-view-id>/view/main.xhtml</to-view-id>
+            <to-view-id>/main.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>/view/main.xhtml</from-view-id>
+        <from-view-id>/main.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>toStartPage</from-outcome>
-            <to-view-id>/view/index.xhtml</to-view-id>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 </faces-config>

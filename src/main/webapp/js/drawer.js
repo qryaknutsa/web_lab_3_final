@@ -3,17 +3,6 @@ let points = []
 const SCALE = 6.1
 
 
-//TODO: fix this
-function areaCheck(x, y, R) {
-    if (x >= 0 && y >= 0) {
-        return x <= R && y <= R;
-    } else if (x <= 0 && y >= 0) {
-        return x * x + y * y <= R * R / 4;
-    } else if (x <= 0 && y <= 0) {
-        return y >= -2 * x - R;
-    } else return false;
-}
-
 function drawPoint(x, y, text, ctx, good = true) {
     if (good) ctx.fillStyle = 'black';
     else ctx.fillStyle = 'red'

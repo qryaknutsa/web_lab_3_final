@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:ace="http://www.icefaces.org/icefaces/components">
+
+<f:view>
+    <h:head>
+        <title>Lab3</title>
+        <link href="css/main.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+    <h:body>
+        <div class="container">
+            <div class="header">
+                <p class="name">Батомункуева Виктория. P32101.</p>
+                <p class="name">вариант 1007.</p>
+            </div>
+            <canvas id="graph" height="200" width="200">
+                <script src="js/drawer.js"></script>
+            </canvas>
+
+            <br/>
+            <h:form id="form" method="post" class="table">
+
+                <h:outputLabel>X ∈ [-4, 4]</h:outputLabel><br/>
+                <div class="slider">
+                    <ace:sliderEntry
+                            id="X"
+                            min="-4"
+                            max="4"
+                            value="${TableController.result.x}"
+                            length="370px"
+                            stepPercent="11.0f"
+                            showLabels="false">
+                        <ace:ajax event="slideEnd" execute="@this" render="@this sliderValue"/>
+                    </ace:sliderEntry>
+                </div>
+                <h:outputText id="sliderValue" value="X = #{TableController.result.x}"/>
+
+                <br/>
+                <br/>
+
+                <h:outputLabel for="Y">Y ∈ [-5, 5]</h:outputLabel>
+                <br/>
+                <h:inputText  id="Y" required="true" requiredMessage="Введите значение Y" maxlength="3"
+                             value="#{TableController.result.y}" validatorMessage="Введите значение в пределах [-5, 5]">
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
+                    <f:convertNumber minFractionDigits="0"/>
+                </h:inputText>
+                <br/>
+<!--                <h:outputText id="inputValue" value="Y = #{TableController.result.y}"/>-->
+<!--                <br/>-->
+                <br/>
+
+                <h:outputLabel>R ∈ [1, 5]</h:outputLabel>
+                <br/>
+                1 <h:outputText value="&#160;" />
+                2 <h:outputText value="&#160;" />
+                3 <h:outputText value="&#160;" />
+                4 <h:outputText value="&#160;" />
+                5
+                <br/>
+                <!--                <h:inputHidden id="input_r" value="${TableController.result.r}"/>-->
+                <h:selectBooleanCheckbox label="1" title="1" id="r1" onclick="putR(id)"/><h:outputText value="&#160;" />
+<!--                <h:commandButton id="button_r1" action="${TableController.set_r1()}" style="display: none;"/>-->
+
+                <h:selectBooleanCheckbox label="2" title="2" id="r2" onclick="putR(id)"/><h:outputText value="&#160;" />
+<!--                <h:commandButton id="button_r2" action="${TableController.set_r2()}" style="display: none;"/>-->
+
+                <h:selectBooleanCheckbox label="3" title="3" id="r3" onclick="putR(id)"/><h:outputText value="&#160;" />
+<!--                <h:commandButton id="button_r3" action="${TableController.set_r3()}" style="display: none;"/>-->
+
+                <h:selectBooleanCheckbox label="4" title="4" id="r4" onclick="putR(id)"/><h:outputText value="&#160;" />
+<!--                <h:commandButton id="button_r4" action="${TableController.set_r4()}" style="display: none;"/>-->
+
+                <h:selectBooleanCheckbox label="5" title="5" id="r5" onclick="putR(id)"/>
+<!--                <h:commandButton id="button_r5" action="${TableController.set_r5()}" style="display: none;"/>-->
+
+
+                <h:inputHidden id="r_value" value="${TableController.result.r}"/>
+                <br/>
+<!--                <h:outputText id="checkBoxValue" value="R = #{TableController.result.r}"/>-->
+
+<!--                <br/><br/>-->
+                <!--                <h:inputHidden id="errorMessage" />-->
+                <br/><br/>
+                <h:commandButton value="Ввод" styleClass="mainButtons" action="#{TableController.addResult()}"/>
+                <br/>
+                <h:commandButton value="Очистить" styleClass="mainButtons" action="#{TableController.cleanTable()}"/>
+                <br/>
+                <h:commandButton id="backButton" styleClass="mainButtons" value="Вернуться назад" action="toStartPage"/>
+
+            </h:form>
+            <br/>
+
+            <h:dataTable value="#{TableController.results}" var="result">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    #{result.x}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    #{result.y}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    #{result.r}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Результат</f:facet>
+                    #{result.inArea}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Время проверки</f:facet>
+                    #{result.time}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Время выполнения</f:facet>
+                    #{result.date}
+                </h:column>
+            </h:dataTable>
+        </div>
+        <script type="text/javascript" src="js/eventHandler.js"></script>
+    </h:body>
+</f:view>
+</html>
+
