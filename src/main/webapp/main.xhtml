@@ -28,11 +28,12 @@
                 <div class="slider">
                     <ace:sliderEntry
                             id="X"
-                            min="-4"
-                            max="4"
-                            value="${TableController.result.x}"
-                            length="370px"
-                            stepPercent="11.0f"
+                            min="-40"
+                            max="40"
+                            value="#{TableController.tempX}"
+                            valueChangeListener="#{TableController.changeX()}"
+                            length="320px"
+                            stepPercent="1.25f"
                             showLabels="false">
                         <ace:ajax event="slideEnd" execute="@this" render="@this sliderValue"/>
                     </ace:sliderEntry>
@@ -44,58 +45,69 @@
 
                 <h:outputLabel for="Y">Y ∈ [-5, 5]</h:outputLabel>
                 <br/>
-                <h:inputText  id="Y" required="true" requiredMessage="Введите значение Y" maxlength="3"
-                             value="#{TableController.result.y}" validatorMessage="Введите значение в пределах [-5, 5]">
-                    <f:validateDoubleRange minimum="-5" maximum="5"/>
-                    <f:convertNumber minFractionDigits="0"/>
+
+                <h:inputText id="Y" required="true" requiredMessage="Введите значение Y" maxlength="10"
+                             value="#{TableController.tempY}"
+                             validatorMessage="Введите значение Y в пределах [-5, 5]"
+                             converterMessage="Введите число в поле Y">
+                    <!--                    <f:validateDoubleRange minimum="-5.0" maximum="5.0"/>-->
+                    <!--                    <f:convertNumber minFractionDigits="1"/>-->
+                    <f:ajax render="@this"/>
                 </h:inputText>
+
                 <br/>
-<!--                <h:outputText id="inputValue" value="Y = #{TableController.result.y}"/>-->
-<!--                <br/>-->
                 <br/>
 
                 <h:outputLabel>R ∈ [1, 5]</h:outputLabel>
                 <br/>
-                1 <h:outputText value="&#160;" />
-                2 <h:outputText value="&#160;" />
-                3 <h:outputText value="&#160;" />
-                4 <h:outputText value="&#160;" />
+                1 <h:outputText value="&#160;"/>
+                2 <h:outputText value="&#160;"/>
+                3 <h:outputText value="&#160;"/>
+                4 <h:outputText value="&#160;"/>
                 5
                 <br/>
                 <!--                <h:inputHidden id="input_r" value="${TableController.result.r}"/>-->
-                <h:selectBooleanCheckbox label="1" title="1" id="r1" onclick="putR(id)"/><h:outputText value="&#160;" />
-<!--                <h:commandButton id="button_r1" action="${TableController.set_r1()}" style="display: none;"/>-->
+                <h:selectBooleanCheckbox label="1" title="1" id="r1" onclick="putR(id)"/><h:outputText value="&#160;"/>
+                <!--                <h:commandButton id="button_r1" action="${TableController.set_r1()}" style="display: none;"/>-->
 
-                <h:selectBooleanCheckbox label="2" title="2" id="r2" onclick="putR(id)"/><h:outputText value="&#160;" />
-<!--                <h:commandButton id="button_r2" action="${TableController.set_r2()}" style="display: none;"/>-->
+                <h:selectBooleanCheckbox label="2" title="2" id="r2" onclick="putR(id)"/><h:outputText value="&#160;"/>
+                <!--                <h:commandButton id="button_r2" action="${TableController.set_r2()}" style="display: none;"/>-->
 
-                <h:selectBooleanCheckbox label="3" title="3" id="r3" onclick="putR(id)"/><h:outputText value="&#160;" />
-<!--                <h:commandButton id="button_r3" action="${TableController.set_r3()}" style="display: none;"/>-->
+                <h:selectBooleanCheckbox label="3" title="3" id="r3" onclick="putR(id)"/><h:outputText value="&#160;"/>
+                <!--                <h:commandButton id="button_r3" action="${TableController.set_r3()}" style="display: none;"/>-->
 
-                <h:selectBooleanCheckbox label="4" title="4" id="r4" onclick="putR(id)"/><h:outputText value="&#160;" />
-<!--                <h:commandButton id="button_r4" action="${TableController.set_r4()}" style="display: none;"/>-->
+                <h:selectBooleanCheckbox label="4" title="4" id="r4" onclick="putR(id)"/><h:outputText value="&#160;"/>
+                <!--                <h:commandButton id="button_r4" action="${TableController.set_r4()}" style="display: none;"/>-->
 
                 <h:selectBooleanCheckbox label="5" title="5" id="r5" onclick="putR(id)"/>
-<!--                <h:commandButton id="button_r5" action="${TableController.set_r5()}" style="display: none;"/>-->
+                <!--                <h:commandButton id="button_r5" action="${TableController.set_r5()}" style="display: none;"/>-->
 
 
                 <h:inputHidden id="r_value" value="${TableController.result.r}"/>
                 <br/>
-<!--                <h:outputText id="checkBoxValue" value="R = #{TableController.result.r}"/>-->
+                <!--                <h:outputText id="checkBoxValue" value="R = #{TableController.result.r}"/>-->
 
-<!--                <br/><br/>-->
-                <!--                <h:inputHidden id="errorMessage" />-->
+                <!--                <br/><br/>-->
+
+
+                <!--                <h:message for="Y" style="color:darkred"/>-->
+
+                <h:outputText value="${TableController.errorMessage}" style="color:darkred"/>
                 <br/><br/>
-                <h:commandButton value="Ввод" styleClass="mainButtons" action="#{TableController.addResult()}"/>
+                <h:commandButton value="Ввод" styleClass="mainButtons" action="#{TableController.addResult()}">
+                    <f:ajax execute="@form" render="@form"/>
+                </h:commandButton>
                 <br/>
-                <h:commandButton value="Очистить" styleClass="mainButtons" action="#{TableController.cleanTable()}"/>
+                <h:commandButton value=" Очистить" styleClass="mainButtons" action="#{TableController.cleanTable()}">
+                    <f:ajax execute="@form" render="@form"/>
+                </h:commandButton>
                 <br/>
                 <h:commandButton id="backButton" styleClass="mainButtons" value="Вернуться назад" action="toStartPage"/>
 
             </h:form>
             <br/>
 
-            <h:dataTable value="#{TableController.results}" var="result">
+            <h:dataTable value="#{TableController.results}" var="result" id="resultTable">
                 <h:column>
                     <f:facet name="header">X</f:facet>
                     #{result.x}

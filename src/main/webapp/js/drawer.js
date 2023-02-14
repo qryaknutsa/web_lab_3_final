@@ -1,6 +1,6 @@
 let ctx, canvas;
 let points = []
-const SCALE = 6.1
+const SCALE = 10.1
 
 
 function drawPoint(x, y, text, ctx, good = true) {
@@ -40,7 +40,7 @@ function restorePoints(R) {
 
 function draw(R = 3, withPoints = true) {
     canvas = document.querySelector('#graph');
-    let width = canvas.width; //consider as 6.1?
+    let width = canvas.width;
     let height = canvas.height;
 
     //recalculation of R
