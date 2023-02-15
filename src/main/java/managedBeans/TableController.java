@@ -1,16 +1,17 @@
 package managedBeans;
 
 import java.io.*;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TableController implements Serializable {
     private List<ResultBean> results;
-
-
     private float tempX;
+
+    public TableController() {
+    }
+
     private String tempY;
 
     public void setTempY(String tempY) {
@@ -21,11 +22,6 @@ public class TableController implements Serializable {
         return tempY;
     }
 
-    public TableController() {
-    }
-
-    private ResultBean result = new ResultBean();
-
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
@@ -35,6 +31,7 @@ public class TableController implements Serializable {
     }
 
     private String errorMessage = "";
+    private ResultBean result = new ResultBean();
 
     public void setResult(ResultBean result) {
         this.result = result;
@@ -59,27 +56,16 @@ public class TableController implements Serializable {
     //Соединение к базе данных
     public Connection getConnection() throws IOException {
         Connection connection = null;
-        URL url = getClass().getResource("file.txt");
-        File file = new File(url.getPath());
-        FileReader fr = new FileReader(file);
-        BufferedReader reader = new BufferedReader(fr);
-        ArrayList<String> properties = new ArrayList<>();
-        String line = reader.readLine();
-        properties.add(line);
-        while (line != null) {
-            System.out.println(line);
-            line = reader.readLine();
-            properties.add(line);
-        }
 
-        String url_db = properties.get(0).split("=")[1].trim();
-        String username_db = properties.get(1).split("=")[1].trim();
-        String password_db = properties.get(2).split("=")[1].trim();
+        String url = "";
+        String username = "";
+        String password = "";
+
 
         try {
-            connection = DriverManager.getConnection(url_db, username_db, password_db);
+            connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            System.out.println("Не получилось...");
+            System.out.println("Не получилось подключиться...");
             e.printStackTrace();
             System.exit(-1);
         }
@@ -91,7 +77,7 @@ public class TableController implements Serializable {
         ResultSet rs = null;
         PreparedStatement pst = null;
         Connection con = getConnection();
-        String stm = "Select * from results"; //"select x, y, r, inArea from s336385.results"
+        String stm = "Select * from results";
         List<ResultBean> results = new ArrayList<ResultBean>();
 
         try {
@@ -120,18 +106,68 @@ public class TableController implements Serializable {
     }
 
 
-    public String cleanTable() {
+    public void cleanTable() {
         try {
             System.out.println("CLEAN");
-            result.checkArea();
             Connection connection = getConnection();
             PreparedStatement prepareStatement = connection.prepareStatement("delete from results");
             prepareStatement.execute();
         } catch (SQLException | IOException e) {
             System.out.println(e.getMessage());
         }
-        return "main.xhtml?faces-redirect=true";
     }
+
+
+    public void changeX() {
+        float x = tempX / 10f;
+        String str_X = String.format("%.1f", x).replaceAll(",", "\\.");
+        result.setX(Double.parseDouble(str_X));
+    }
+
+
+    public void addResult() {
+        if (tempY == null || tempY.isEmpty()) {
+            errorMessage = "Введите значение Y";
+        } else {
+            try {
+                String y2 = tempY.replace(',', '.');
+                double y1 = Double.parseDouble(y2);
+                if (y1 <= -5 || y1 >= 5) {
+                    errorMessage = "Введите значение Y в пределах [-5, 5]";
+                    return;
+                } else {
+                    double scale = 10;
+                    double y = Math.ceil(y1 * scale) / 10f;
+                    result.setY(y);
+                }
+            } catch (NumberFormatException e) {
+                errorMessage = "Введите число в поле Y";
+                return;
+            }
+            try {
+                System.out.println("ADD");
+                result.checkArea();
+                Connection connection = getConnection();
+                PreparedStatement prepareStatement = connection.prepareStatement("insert into results(id, x, y, r, inarea, comptime, curdate) values(?, ?, ?, ?, ?, ?, ?)");
+                prepareStatement.setDouble(1, 1);
+                prepareStatement.setDouble(2, result.getX());
+                prepareStatement.setDouble(3, result.getY());
+                prepareStatement.setDouble(4, result.getR());
+
+                if (result.getInArea().equals("Попал")) prepareStatement.setBoolean(5, true);
+                else prepareStatement.setBoolean(5, false);
+
+                prepareStatement.setDouble(6, result.getTime());
+                prepareStatement.setString(7, result.getDate());
+                prepareStatement.executeUpdate();
+                connection.close();
+                errorMessage = "";
+            } catch (SQLException | IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
 
     public void set_r1() {
         result.setR(1);
@@ -151,55 +187,6 @@ public class TableController implements Serializable {
 
     public void set_r5() {
         result.setR(5);
-    }
-
-
-    public void changeX() {
-        float x = tempX / 10f;
-        String str_X = String.format("%.1f", x).replaceAll(",", "\\.");
-        result.setX(Double.parseDouble(str_X));
-    }
-
-    public String addResult() {
-        //check value of Y
-//        if(result.getY())
-        if (tempY == null || tempY.isEmpty()) {
-            errorMessage = "Введите число Y";
-            return "main.xhtml?faces-redirect=true";
-        }
-        try {
-            double y = Double.parseDouble(tempY);
-
-            if (y <= -5 || y >= 5) {
-                errorMessage = "Введите значение Y в пределах [-5, 5]";
-                return "main.xhtml?faces-redirect=true";
-            } else result.setY(y);
-        } catch (NumberFormatException e) {
-            errorMessage = "Введите число в поле Y";
-            return "main.xhtml?faces-redirect=true";
-        }
-        try {
-            System.out.println("ADD");
-            result.checkArea();
-            Connection connection = getConnection();
-            PreparedStatement prepareStatement = connection.prepareStatement("insert into results(id, x, y, r, inarea, comptime, curdate) values(?, ?, ?, ?, ?, ?, ?)");
-            prepareStatement.setDouble(1, 1);
-            prepareStatement.setDouble(2, result.getX());
-            prepareStatement.setDouble(3, result.getY());
-            prepareStatement.setDouble(4, result.getR());
-
-            if (result.getInArea().equals("Попал")) prepareStatement.setBoolean(5, true);
-            else prepareStatement.setBoolean(5, false);
-
-            prepareStatement.setDouble(6, result.getTime());
-            prepareStatement.setString(7, result.getDate());
-            prepareStatement.executeUpdate();
-            connection.close();
-        } catch (SQLException | IOException e) {
-            System.out.println(e.getMessage());
-        }
-        errorMessage = "";
-        return "main.xhtml?faces-redirect=true";
     }
 
 }

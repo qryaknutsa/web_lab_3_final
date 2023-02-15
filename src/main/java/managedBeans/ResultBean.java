@@ -15,8 +15,7 @@ public class ResultBean implements Serializable {
 
     public ResultBean() {
         this.x = 0;
-        this.y = 0;
-        this.r = 1;
+        this.r = 3;
         this.inArea = "";
         this.time = 0;
         this.date = "";
