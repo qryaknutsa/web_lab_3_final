@@ -34,7 +34,7 @@
                             length="320px"
                             stepPercent="1.25f"
                             showLabels="false">
-                        <ace:ajax event="slideEnd" execute="@this" render="@this sliderValueOutput"/>
+                        <ace:ajax event="slideEnd" execute="@this" render="@this sliderValueOutput sliderValue"/>
                     </ace:sliderEntry>
                 </div>
                 <h:outputText id="sliderValueOutput" value="X = #{TableController.result.x}"/>
@@ -51,12 +51,7 @@
                 </h:inputText>
 
 <!--                пытаюсь записать значение у-->
-                <ace:sliderEntry
-                        id="yValue"
-                        min="-100"
-                        max="100"
-                        value="#{TableController.result.y}"
-                        style="display: none">
+                <ace:sliderEntry id="yValue" min="-100" max="100" value="#{TableController.result.y}" style="display: none">
                     <ace:ajax event="slideEnd" execute="@this" render="@this"/>
                 </ace:sliderEntry>
 

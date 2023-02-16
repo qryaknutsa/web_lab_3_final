@@ -118,7 +118,6 @@ public class TableController implements Serializable {
 
 
     public void changeX() {
-        System.out.println("change X");
         float x = tempX / 10f;
         String str_X = String.format("%.1f", x).replaceAll(",", "\\.");
         result.setX(Double.parseDouble(str_X));
