@@ -61,7 +61,6 @@ public class TableController implements Serializable {
         String username = "";
         String password = "";
 
-
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
@@ -119,6 +118,7 @@ public class TableController implements Serializable {
 
 
     public void changeX() {
+        System.out.println("change X");
         float x = tempX / 10f;
         String str_X = String.format("%.1f", x).replaceAll(",", "\\.");
         result.setX(Double.parseDouble(str_X));
@@ -126,6 +126,7 @@ public class TableController implements Serializable {
 
 
     public void addResult() {
+        System.out.println("ADD");
         if (tempY == null || tempY.isEmpty()) {
             errorMessage = "Введите значение Y";
         } else {
@@ -145,7 +146,6 @@ public class TableController implements Serializable {
                 return;
             }
             try {
-                System.out.println("ADD");
                 result.checkArea();
                 Connection connection = getConnection();
                 PreparedStatement prepareStatement = connection.prepareStatement("insert into results(id, x, y, r, inarea, comptime, curdate) values(?, ?, ?, ?, ?, ?, ?)");

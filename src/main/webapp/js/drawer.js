@@ -3,15 +3,16 @@ let points = []
 const SCALE = 10.1
 
 
-function drawPoint(x, y, text, ctx, good = true) {
-    if (good) ctx.fillStyle = 'black';
-    else ctx.fillStyle = 'red'
-    ctx.font = "12px OCR A Extended";
+function drawDot(x, y, r, color, text, ctx){
+    ctx.fillStyle= color;
     ctx.beginPath();
-    ctx.arc(x, y, 2, 0, 2 * Math.PI, true);
+    ctx.arc(x, y, r, 0, 2 * Math.PI, true);
     ctx.fill();
     ctx.fillText(text, x + 3, y - 6);
+    ctx.closePath();
+
 }
+
 
 function restorePoints(R) {
 
@@ -23,7 +24,6 @@ function restorePoints(R) {
     for (let i = 0; i < points.length; i++) {
         let x_pos = points[i][0]
         let y_pos = points[i][1]
-        let oldR = points[i][2]
 
 
         let y_cord = -1 * (y_pos - zero_y), x_cord = (x_pos - zero_x);
@@ -31,9 +31,7 @@ function restorePoints(R) {
         x_cord = x_cord / width * SCALE;
         y_cord = y_cord / height * SCALE;
 
-        let good = areaCheck(x_cord, y_cord, R)
-
-        drawPoint(x_pos, y_pos, '', ctx, good)
+        drawDot(x_pos, y_pos,"black" ,'', ctx)
     }
 
 }
@@ -43,7 +41,6 @@ function draw(R = 3, withPoints = true) {
     let width = canvas.width;
     let height = canvas.height;
 
-    //recalculation of R
     R = width * (R / SCALE)
     if (!canvas.getContext) {
         return;
@@ -96,21 +93,20 @@ function draw(R = 3, withPoints = true) {
     ctx.lineTo(width / 2, height);
     ctx.stroke();
 
-    drawPoint(width / 2, height / 2 - R, 'R', ctx);
-    drawPoint(width / 2, height / 2 - R / 2, 'R/2', ctx);
-    drawPoint(width / 2, height / 2 + R, '-R', ctx);
-    drawPoint(width / 2, height / 2 + R / 2, '-R/2', ctx);
-    drawPoint(width / 2 + R, height / 2, 'R', ctx);
-    drawPoint(width / 2 + R / 2, height / 2, 'R/2', ctx);
-    drawPoint(width / 2 - R, height / 2, '-R', ctx);
-    drawPoint(width / 2 - R / 2, height / 2, '-R/2', ctx);
+    drawDot(width / 2, height / 2 - R, 2,"black",'R', ctx);
+    drawDot(width / 2, height / 2 - R / 2,2,"black", 'R/2', ctx);
+    drawDot(width / 2, height / 2 + R,2,"black", '-R', ctx);
+    drawDot(width / 2, height / 2 + R / 2,2,"black", '-R/2', ctx);
+    drawDot(width / 2 + R, height / 2,2,"black", 'R', ctx);
+    drawDot(width / 2 + R / 2, height / 2,2,"black", 'R/2', ctx);
+    drawDot(width / 2 - R, height / 2,2,"black", '-R', ctx);
+    drawDot(width / 2 - R / 2, height / 2,2,"black", '-R/2', ctx);
 
     if (withPoints) restorePoints(R * SCALE / width)
 
-
 }
 
-function restoreCanvas(R = 1, withPoints = true) {
+function restoreCanvas(R = 3, withPoints = true) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw(R, withPoints);
 }

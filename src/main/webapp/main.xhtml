@@ -23,7 +23,6 @@
 
             <br/>
             <h:form id="form" method="post" class="table">
-
                 <h:outputLabel>X ∈ [-4, 4]</h:outputLabel><br/>
                 <div class="slider">
                     <ace:sliderEntry
@@ -35,10 +34,11 @@
                             length="320px"
                             stepPercent="1.25f"
                             showLabels="false">
-                        <ace:ajax event="slideEnd" execute="@this" render="@this sliderValue"/>
+                        <ace:ajax event="slideEnd" execute="@this" render="@this sliderValueOutput"/>
                     </ace:sliderEntry>
                 </div>
-                <h:outputText id="sliderValue" value="X = #{TableController.result.x}"/>
+                <h:outputText id="sliderValueOutput" value="X = #{TableController.result.x}"/>
+                <h:inputHidden id="sliderValue" value="#{TableController.result.x}"/>
 
                 <br/>
                 <br/>
@@ -47,8 +47,18 @@
                 <br/>
 
                 <h:inputText id="Y" required="true" requiredMessage="Введите значение Y" maxlength="10" value="#{TableController.tempY}">
-                    <f:ajax render="@this"/>
+                    <f:ajax event="change" execute="@this" render="@this"/>
                 </h:inputText>
+
+<!--                пытаюсь записать значение у-->
+                <ace:sliderEntry
+                        id="yValue"
+                        min="-100"
+                        max="100"
+                        value="#{TableController.result.y}"
+                        style="display: none">
+                    <ace:ajax event="slideEnd" execute="@this" render="@this"/>
+                </ace:sliderEntry>
 
                 <br/>
                 <br/>
@@ -78,11 +88,12 @@
 
                 <br/>
 
-                <h:outputText for="Y" id="errorMessage" style="color:darkred" value="${TableController.errorMessage}"/>
+                <h:outputText id="errorMessage" style="color:darkred" value="${TableController.errorMessage}"/>
+
                 <br/><br/>
 
-                <h:commandButton value="Ввод" styleClass="mainButtons" action="#{TableController.addResult()}">
-                    <f:ajax render="resultTable errorMessage"/>
+                <h:commandButton value="Ввод" id="submit_button" styleClass="mainButtons" action="#{TableController.addResult()}">
+                    <f:ajax execute="@form" render="resultTable errorMessage"/>
                 </h:commandButton>
 
                 <br/>
